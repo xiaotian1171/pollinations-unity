@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Compiles the whole package (core + Unity facing code + the sample) against
+       minimal UnityEngine stubs, so a typo cannot reach a game. The stubs are
+       declarations only: this proves the code compiles, not that Unity runs it. -->
+  <PropertyGroup>
+    <OutputType>Library</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <AssemblyName>Pollinations.Unity.Compile</AssemblyName>
+    <RootNamespace>Pollinations</RootNamespace>
+    <LangVersion>9</LangVersion>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <NoWarn>CS0067;CS0649;CS0169</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="../../Runtime/**/*.cs" />
+    <Compile Include="../../Samples~/Demo/**/*.cs" />
+    <Compile Include="../UnityStubs/**/*.cs" />
+  </ItemGroup>
+
+</Project>

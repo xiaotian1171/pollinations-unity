@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Unity does not compile anything under a folder ending in "~", so this
+       harness lives inside the package without ever reaching a game build. -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <AssemblyName>Pollinations.Core.Tests</AssemblyName>
+    <RootNamespace>Pollinations.Tests</RootNamespace>
+    <LangVersion>9</LangVersion>
+    <InvariantGlobalization>true</InvariantGlobalization>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- The pure core of the package, compiled straight from the package. -->
+    <Compile Include="../../Runtime/Core/**/*.cs" />
+  </ItemGroup>
+
+</Project>

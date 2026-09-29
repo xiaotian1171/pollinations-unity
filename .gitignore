@@ -1,0 +1,14 @@
+# dotnet build output for the test harness
+bin/
+obj/
+*.user
+# Unity generated folders, in case the package is embedded in a project
+Library/
+Temp/
+Logs/
+*.csproj
+*.sln
+!tests~/Pollinations.Core.Tests/Pollinations.Core.Tests.csproj
+!tests~/Pollinations.Unity.Compile/Pollinations.Unity.Compile.csproj
+# Local credentials
+*.env

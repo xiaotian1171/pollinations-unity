@@ -1,0 +1,33 @@
+{
+  "name": "com.xiaotian1171.pollinations",
+  "version": "1.0.0",
+  "displayName": "Pollinations",
+  "description": "Text, image and speech generation for Unity games, with a device sign-in flow so players pay with their own Pollen.",
+  "unity": "2021.3",
+  "keywords": [
+    "pollinations",
+    "ai",
+    "llm",
+    "text-generation",
+    "image-generation",
+    "text-to-speech",
+    "generative"
+  ],
+  "author": {
+    "name": "xiaotian1171",
+    "url": "https://github.com/xiaotian1171"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "com.unity.ugui": "1.0.0"
+  },
+  "samples": [
+    {
+      "displayName": "Demo",
+      "description": "A runnable demo: add the component to an empty GameObject and press Play.",
+      "path": "Samples~/Demo"
+    }
+  ],
+  "documentationUrl": "https://github.com/xiaotian1171/pollinations-unity#readme",
+  "changelogUrl": "https://github.com/xiaotian1171/pollinations-unity/blob/main/CHANGELOG.md"
+}
