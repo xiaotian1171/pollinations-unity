@@ -1,0 +1,36 @@
+Pollinations core tests
+
+-- json
+-- urls
+-- errors
+-- models
+-- config
+-- client
+-- chat
+-- device flow
+-- wav
+-- transport
+
+total: 317 passed, 0 failed
+
+=== Pollinations live check
+key present: yes
+app key: pk_unity
+[ok] anonymous catalogue status=200 attempts=1 2.07s
+[ok] prompt route status=200 0.31s
+     content=Pollen is a fine powder produced by plants (especially flowering plants) that carries male reproductive cells for fertil...
+[ok] chat status=200 attempts=1 0.30s model=us.amazon.nova-micro-v1:0
+     content=A watermill is a structure that uses flowing or falling water to power a mechanical mill for tasks like grinding grain or sawing wood.
+     usage={"prompt_tokens":12,"completion_tokens":28,"total_tokens":40,"prompt_tokens_details":{"cached_tokens":0}}
+[ok] catalogue text status=200 attempts=1 0.34s 110 models
+     first ids: openai/gpt-5.4-nano, openai/gpt-5.3-codex, openai/gpt-6-luna, openai/gpt-6-sol, typesafe/jev-1.13
+[ok] catalogue image status=200 attempts=1 0.27s 19 models
+     first ids: tongyi-mai/z-image-turbo, black-forest-labs/flux.1.1-pro, microsoft/mai-image-2.6, microsoft/mai-image-2.6-flash, microsoft/mai-image-2.5-flash
+[ok] catalogue audio status=200 attempts=1 0.32s 6 models
+     first ids: openai/tts-1, openai/tts-1-hd, openai/gpt-transcribe, assemblyai/universal-2, assemblyai/universal-3.5-pro
+[ok] image status=200 attempts=1 0.36s content-type=image/jpeg bytes=28813
+[ok] speech (openai/tts-1) status=200 attempts=1 0.42s content-type=audio/wav bytes=95102 wav=24000Hz 1ch 1.6s
+[ok] device code status=200 attempts=1 1.04s user_code=V8PKD6ZM url=https://enter.pollinations.ai/device interval=5 expires_in=1800
+[ok] device token status=400 state=Pending (pending is correct: nobody approved)
+
+=== live check finished: 0 failing step(s)

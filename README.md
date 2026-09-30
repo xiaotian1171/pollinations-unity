@@ -206,6 +206,11 @@ dotnet run --project tests~/Pollinations.Core.Tests        # 317 checks
 # 2. the live check: talks to the real API, needs a key for the signed steps
 POLLINATIONS_API_KEY=sk_... dotnet run --project tests~/Pollinations.Core.Tests -- --live
 
+#    the speech step can be pointed at a model the account can pay for, the same
+#    way the chat step is (see "Notes and limits" for why that matters)
+POLLINATIONS_TEST_SPEECH_MODEL=openai/tts-1 POLLINATIONS_API_KEY=sk_... \
+    dotnet run --project tests~/Pollinations.Core.Tests -- --live
+
 # 3. compile the Unity facing code against minimal UnityEngine stubs
 dotnet build tests~/Pollinations.Unity.Compile
 ```
@@ -219,16 +224,20 @@ Both projects run in CI on pull requests - see `.github/workflows/tests.yml`.
 `--live` is the evidence script: it prints real status codes, latencies and payload
 shapes. A run against the live API produced, among others:
 
-- `chat` `200` in 2.30 s, model `us.amazon.nova-micro-v1:0`, usage
+- `chat` `200` in 0.30 s, model `us.amazon.nova-micro-v1:0`, usage
   `{"prompt_tokens":12,"completion_tokens":28,"total_tokens":40}`
-- the prompt route `200` in 3.01 s with a plain answer
-- `image` `200` in 2.96 s: `image/jpeg`, 28 813 bytes
-- catalogues: 110 text, 18 image and 4 audio models
-- `speech` `402` on a free account, classified as a balance failure with the message
-  the API sent (speech models need paid pollen)
+- the prompt route `200` in 0.31 s with a plain answer
+- `image` `200` in 0.36 s: `image/jpeg`, 28 813 bytes
+- catalogues: 110 text, 19 image and 6 audio models
+- `speech (openai/tts-1)` `200` in 0.42 s: `audio/wav`, 95 102 bytes, decoded to
+  24 000 Hz mono, 1.6 s. The same key answered `402` `INSUFFICIENT_BALANCE` for
+  `elevenlabs/eleven-v3`, the package default, because that model bills to paid
+  pollen - see "Notes and limits"
 - the device flow: `POST /api/device/code` `200` with `user_code`, `interval=5`,
   `expires_in=1800`, then `POST /api/device/token` `400`
   `{"error":"authorization_pending"}` while nobody had approved
+
+The transcript of that run is committed as `tests~/evidence/live_check.txt`.
 
 ## Layout
 
@@ -259,8 +268,14 @@ inside the package without ever reaching a build.
 
 - **Never ship a server-side key** in a released game. Use the device flow, or a key
   the player pastes.
-- Speech models require **paid pollen**; text and image models answered on a free
-  account in the run above.
+- Speech models are not all billed the same way. `openai/tts-1` and
+  `openai/tts-1-hd` drew on the ordinary pollen balance and answered `200`, while
+  `elevenlabs/eleven-v3` (the package default), `elevenlabs/eleven-flash-v2.5`,
+  `google/gemini-3.8-flash-tts`, `qwen/qwen3-tts-flash`, `x-ai/grok-tts`,
+  `hexgrad/kokoro-82m`, `sesame/csm-1b` and `fish-audio/s2.1-pro` all answered `402`
+  `INSUFFICIENT_BALANCE`: they bill to **paid** pollen, which is bought, not
+  granted. Set `PollinationsSpeech.Model` to a model the account can pay for, or
+  the player's own key through the device flow.
 - Anonymous requests are rate limited, and were answered `200` and `401` at different
   times; treat a key as required.
 - `Task.Delay` and threads are unavailable on WebGL, so the device flow should be

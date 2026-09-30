@@ -153,29 +153,36 @@ namespace Pollinations.Tests
 
         private static async Task SpeechAsync(PollinationsClient client)
         {
+            // Most speech models bill to paid pollen and answer 402 without it, while
+            // openai/tts-1 draws on the ordinary pollen balance. The model can be
+            // swapped, the same way the chat step is:
+            //   POLLINATIONS_TEST_SPEECH_MODEL=openai/tts-1
+            string model = Environment.GetEnvironmentVariable("POLLINATIONS_TEST_SPEECH_MODEL") ?? PollinationsConfig.DefaultSpeechModel;
             var payload = new Dictionary<string, object>
             {
-                { "model", PollinationsConfig.DefaultSpeechModel },
+                { "model", model },
                 { "input", "Welcome to Pollen Village." },
                 { "voice", PollinationsConfig.DefaultVoice },
                 { "response_format", "wav" },
             };
             PollinationsResult result = await client.PostJsonAsync(PollinationsUrls.Speech(), payload);
+            string what = "speech (" + model + ")";
             if (result.Ok)
             {
                 PollinationsAudio audio = PollinationsWav.Decode(result.Bytes);
-                Pass("speech", result, "content-type=" + result.ContentType + " bytes=" + result.Bytes.Length
+                Pass(what, result, "content-type=" + result.ContentType + " bytes=" + result.Bytes.Length
                     + (audio == null ? "" : " wav=" + audio.SampleRate + "Hz " + audio.Channels + "ch " + audio.Seconds.ToString("0.0") + "s"));
                 return;
             }
 
             if (result.Kind == PollinationsErrorKind.Balance)
             {
-                Console.WriteLine("[skip] speech needs paid pollen: " + Trim(result.Error, 140));
+                Console.WriteLine("[skip] " + what + " needs paid pollen: " + Trim(result.Error, 140));
+                Console.WriteLine("       set POLLINATIONS_TEST_SPEECH_MODEL=openai/tts-1 to bill the ordinary pollen balance instead");
                 return;
             }
 
-            Fail("speech", result);
+            Fail(what, result);
         }
 
         private static async Task DeviceFlowAsync(PollinationsClient client)

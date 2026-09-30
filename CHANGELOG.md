@@ -1,5 +1,13 @@
 # Changelog
 
+## Unreleased
+
+- The live check takes `POLLINATIONS_TEST_SPEECH_MODEL`, so `--live` can show speech
+  generation succeeding on an account whose pollen is the ordinary kind rather than
+  the paid kind.
+- README: the speech limit now names the models that bill to paid pollen instead of
+  saying that all speech models do.
+
 ## 1.0.0
 
 First release.
